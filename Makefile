@@ -4,11 +4,11 @@ IMAGE_PREFIX ?= drycc-addons
 COMPONENT ?= mariadb
 SHORT_NAME ?= $(COMPONENT)
 PLATFORM ?= linux/amd64,linux/arm64
-VERSION ?= 10.8
+MARIADB_VERSION ?= 10.8
 
 include versioning.mk
 
-SHELL_SCRIPTS = $(shell find ${VERSION}/debian/ -name '*.sh') $(wildcard *.sh)
+SHELL_SCRIPTS = $(shell find ${MARIADB_VERSION}/debian/ -name '*.sh') $(wildcard *.sh)
 
 DEV_ENV_IMAGE := ${DRYCC_REGISTRY}/drycc/go-dev
 DEV_ENV_WORK_DIR := /opt/drycc/go/src/${REPO_PATH}
@@ -31,11 +31,11 @@ test-style:
 build: docker-build
 
 docker-build: check-docker
-	docker build ${DOCKER_BUILD_FLAGS} -t ${IMAGE} ${VERSION}/debian
+	docker build ${DOCKER_BUILD_FLAGS} -t ${IMAGE} ${MARIADB_VERSION}/debian
 	docker tag ${IMAGE} ${MUTABLE_IMAGE}
 
 docker-buildx: check-docker
-	docker buildx build --platform ${PLATFORM} -t ${IMAGE} ${VERSION}/debian --push
+	docker buildx build --platform ${PLATFORM} -t ${IMAGE} ${MARIADB_VERSION}/debian --push
 
 clean: check-docker
 	docker rmi $(IMAGE)
