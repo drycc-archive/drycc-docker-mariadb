@@ -8,15 +8,18 @@ services:
     volumes:
       - 'mariadb_master_data:/drycc/mariadb'
     environment:
+      - DRYCC_DEBUG=true
       - MARIADB_REPLICATION_MODE=master
       - MARIADB_REPLICATION_USER=repl_user
+      - MARIADB_REPLICATION_PASSWORD=my_repl_passwd
       - MARIADB_USER=my_user
+      - MARIADB_PASSWORD=my_passwd
       - MARIADB_DATABASE=my_database
-      # ALLOW_EMPTY_PASSWORD is recommended only for development.
-      - ALLOW_EMPTY_PASSWORD=yes
       - MARIADB_ROOT_PASSWORD=my_root_password
+      # ALLOW_EMPTY_PASSWORD is recommended only for development.
+      # - ALLOW_EMPTY_PASSWORD=yes
     healthcheck:
-      test: ['CMD', '/opt/drycc/scripts/mariadb/healthcheck.sh']
+      test: ['CMD', 'init-stack', '/opt/drycc/scripts/mariadb/healthcheck.sh']
       interval: 15s
       timeout: 5s
       retries: 6
@@ -28,17 +31,20 @@ services:
     depends_on:
       - mariadb-master
     environment:
+      - DRYCC_DEBUG=true
       - MARIADB_REPLICATION_MODE=slave
+      - MARIADB_MASTER_ROOT_USER=root
+      - MARIADB_MASTER_ROOT_PASSWORD=my_root_password
       - MARIADB_REPLICATION_USER=repl_user
+      - MARIADB_REPLICATION_PASSWORD=my_repl_passwd
       - MARIADB_USER=my_user
       - MARIADB_DATABASE=my_database
       - MARIADB_MASTER_HOST=mariadb-master
       - MARIADB_MASTER_PORT_NUMBER=3306
-      - MARIADB_MASTER_ROOT_PASSWORD=my_root_password
       # ALLOW_EMPTY_PASSWORD is recommended only for development.
-      - ALLOW_EMPTY_PASSWORD=yes
+      # - ALLOW_EMPTY_PASSWORD=yes
     healthcheck:
-      test: ['CMD', '/opt/drycc/scripts/mariadb/healthcheck.sh']
+      test: ['CMD', 'init-stack', '/opt/drycc/scripts/mariadb/healthcheck.sh']
       interval: 15s
       timeout: 5s
       retries: 6
