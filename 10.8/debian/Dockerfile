@@ -7,7 +7,7 @@ ENV GOSU_VERSION="1.14" \
 COPY prebuildfs /
 
 RUN install-packages libnss-wrapper psmisc \
-    && install-stack mariadb $MARIADB_VERSION \
+    && install-stack gosu $GOSU_VERSION \
     && install-stack ini-file $INI_FILE_VERSION \
     && install-stack mariadb $MARIADB_VERSION \
     && echo "export NSS_WRAPPER_LIB=/usr/lib/`echo $(uname -m)`-linux-gnu/libnss_wrapper.so" >> /opt/drycc/mariadb/profile.d/mariadb.sh \
